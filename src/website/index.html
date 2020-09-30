@@ -1,0 +1,150 @@
+<html>
+    <head>
+        <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.2.7"></script>
+        <script src="main.js"></script>
+
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+        <meta charset="utf-8"/>
+        <title>Virtual Visual Environment</title>
+        <style>
+            * {
+                padding: 0;
+                margin: 0;
+            }
+        
+            canvas {
+                background: #eee;
+                display: block;
+                margin: 0; 
+            }
+
+
+            .slidecontainer {
+            width: 100%; /* Width of the outside container */
+            }
+
+            .slider {
+            -webkit-appearance: none;
+            width: 200px;
+            height: 15px;
+            border-radius: 5px;   
+            background: #d3d3d3;
+            outline: none;
+            opacity: 0.7;
+            -webkit-transition: .2s;
+            transition: opacity .2s;
+            }
+
+            .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%; 
+            background: #4CAF50;
+            cursor: pointer;
+            }
+
+            .slider::-moz-range-thumb {
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background: #4CAF50;
+            cursor: pointer;
+            }
+
+
+
+            table.test td {
+                padding: 12px 12px 12px 12px;
+            }
+            table.latent td {
+                padding: 16px 0px 16px 0px;
+            }
+
+            .content {
+                margin-top:auto;
+                margin-bottom:auto;
+                text-align:center;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-7 offset-md-0">
+                    <br>
+                    <div class="alert alert-warning" id="warn" role="alert" style="display:none">
+                        This page makes use of GPU-acceleration using WebGL. No GPU/WebGL support detected. Performance may be slow.
+                    </div>
+
+                    <!-- Config section -->
+                    <table class="test">
+                        <tr>
+                            <td><h5>Configuration</h5></td>
+                            <td>
+                                <div class="btn-group btn-group-toggle" data-toggle="buttons">
+
+                                    <label class="btn btn-primary active " onclick="load1()">
+                                        <input type="radio" name="options" id="option1" autocomplete="off" checked> 1
+                                    </label>
+                                    <label class="btn btn-primary" onclick="load2()">
+                                        <input type="radio" name="options" id="option2" autocomplete="off"> 2
+                                    </label>
+                                    <label class="btn btn-primary" onclick="load3()">
+                                        <input type="radio" name="options" id="option2" autocomplete="off"> 3
+                                    </label>
+                                    <label class="btn btn-primary" onclick="load4()">
+                                        <input type="radio" name="options" id="option2" autocomplete="off"> 4
+                                    </label>
+                                    <label class="btn btn-primary" onclick="load5()">
+                                        <input type="radio" name="options" id="option2" autocomplete="off"> 5
+                                    </label>
+                                    <label class="btn btn-primary" onclick="load6()">
+                                        <input type="radio" name="options" id="option2" autocomplete="off"> 6
+                                    </label>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                    
+                    <!-- Board section -->
+                    <table class="test">
+                        <tr>
+                            <td>
+                                <canvas id="boardCanvas" width="400" height="400"></canvas>
+                            </td>
+                            <td>
+                                <!-- Latent sliders section -->
+                                <table class="latent">
+                                    <tr><h5>Latent vector values</h5></tr>
+                                    <tr><td><div class="slidecontainer"> <input type="range" min="0" max="100" value="49" class="slider" id="lat1" oninput="slide_change()"> </div><td></tr>
+                                    <tr><td><div class="slidecontainer"> <input type="range" min="0" max="100" value="49" class="slider" id="lat2" oninput="slide_change()"> </div><td></tr>
+                                    <tr><td><div class="slidecontainer"> <input type="range" min="0" max="100" value="49" class="slider" id="lat3" oninput="slide_change()"> </div><td></tr>
+                                    <tr><td><div class="slidecontainer"> <input type="range" min="0" max="100" value="49" class="slider" id="lat4" oninput="slide_change()"> </div><td></tr>
+                                    <tr><td><div class="slidecontainer"> <input type="range" min="0" max="100" value="49" class="slider" id="lat5" oninput="slide_change()"> </div><td></tr>
+                                    <tr><td><div class="slidecontainer"> <input type="range" min="0" max="100" value="49" class="slider" id="lat6" oninput="slide_change()"> </div><td></tr>
+                                    <tr><td><div class="slidecontainer"> <input type="range" min="0" max="100" value="49" class="slider" id="lat7" oninput="slide_change()"> </div><td></tr>
+                                    <tr><td><div class="slidecontainer"> <input type="range" min="0" max="100" value="49" class="slider" id="lat8" oninput="slide_change()"> </div><td></tr>
+
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <h5>Reconstructed camera image</h5>
+                    <canvas id="cameraCanvas" width="640" height="480"></canvas>
+                    
+                    
+                </div>
+            </div>
+        </div>
+
+    </body>
+
+</html>
