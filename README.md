@@ -1,4 +1,4 @@
 # Towards-Robot-Vision
 Towards Robot Vision using Deep Neural Networks in Evolutionary Robotics
 
-Data link will be uploaded soon.
+Data download link: https://drive.google.com/file/d/1hGfADmJ5V97ifzSphZkwn_sOgOgYWgYJ/view?usp=sharing
